@@ -11,21 +11,29 @@ import android.os.Looper
  * Switches the camera flash on and off as a torch. Needs no permissions.
  *
  * The torch state is tracked through a callback, so toggling also works when the torch was turned on
- * somewhere else, e.g. from the quick settings tile.
+ * somewhere else, e.g. from the quick settings tile. [onChange] hears about every change.
  */
-class Torch(context: Context) {
+class Torch(context: Context, private val onChange: (isOn: Boolean) -> Unit = {}) {
 
     private val cameraManager = context.getSystemService(CameraManager::class.java)
     private val cameraId = findFlashCamera()
-    private var isOn = false
+
+    val isAvailable get() = cameraId != null
+
+    var isOn = false
+        private set
 
     private val callback = object : CameraManager.TorchCallback() {
         override fun onTorchModeChanged(id: String, enabled: Boolean) {
-            if (id == cameraId) isOn = enabled
+            if (id != cameraId) return
+            isOn = enabled
+            onChange(enabled)
         }
 
         override fun onTorchModeUnavailable(id: String) {
-            if (id == cameraId) isOn = false
+            if (id != cameraId) return
+            isOn = false
+            onChange(false)
         }
     }
 

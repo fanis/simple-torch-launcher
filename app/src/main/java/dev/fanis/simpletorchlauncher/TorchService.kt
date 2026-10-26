@@ -1,6 +1,8 @@
 package dev.fanis.simpletorchlauncher
 
 import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
+import android.content.SharedPreferences
 import android.media.AudioManager
 import android.os.Handler
 import android.os.Looper
@@ -18,8 +20,11 @@ import android.view.accessibility.AccessibilityEvent
  *
  * While the screen is off, [ScreenOffVolumeKeys] reports presses instead. There the volume doesn't
  * change on a press anyway, so nothing is held back.
+ *
+ * While the app is switched off in its settings, the service stops asking for key events, so key
+ * presses skip it entirely.
  */
-class TorchService : AccessibilityService() {
+class TorchService : AccessibilityService(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val handler = Handler(Looper.getMainLooper())
     private var torch: Torch? = null
@@ -38,9 +43,12 @@ class TorchService : AccessibilityService() {
     override fun onServiceConnected() {
         torch = Torch(this)
         screenOffKeys = ScreenOffVolumeKeys(this, ::onScreenOffPress).also { it.start() }
+        Prefs.registerListener(this, this)
+        updateKeyFiltering()
     }
 
     override fun onDestroy() {
+        Prefs.unregisterListener(this, this)
         pendingPress?.let { handler.removeCallbacks(it) }
         pendingPress = null
         screenOffKeys?.stop()
@@ -52,8 +60,21 @@ class TorchService : AccessibilityService() {
 
     override fun onInterrupt() {}
 
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
+        updateKeyFiltering()
+        screenOffKeys?.update()
+    }
+
+    private fun updateKeyFiltering() {
+        val info = serviceInfo ?: return
+        val filtering = (info.flags and AccessibilityServiceInfo.FLAG_REQUEST_FILTER_KEY_EVENTS) != 0
+        if (filtering == Prefs.enabled(this)) return
+        info.flags = info.flags xor AccessibilityServiceInfo.FLAG_REQUEST_FILTER_KEY_EVENTS
+        serviceInfo = info
+    }
+
     override fun onKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode != Prefs.triggerKeyCode(this)) return false
+        if (!Prefs.enabled(this) || event.keyCode != Prefs.triggerKeyCode(this)) return false
         if (event.action == KeyEvent.ACTION_DOWN) onTriggerKeyDown(event)
         // Swallow the whole press, key-up included. Volume changes are replayed by hand.
         return true
