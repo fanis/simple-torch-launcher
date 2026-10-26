@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Torch Launcher</string>
+
+    <string name="intro">Double-press a volume button to turn the torch on. Double-press it again to turn it off.</string>
+
+    <string name="section_status">Status</string>
+    <string name="status_on">On. The volume button shortcut is active.</string>
+    <string name="status_off">Off. Turn on Simple Torch Launcher in your accessibility settings so it can see volume button presses.</string>
+    <string name="open_accessibility_settings">Open accessibility settings</string>
+    <string name="restricted_hint">If Android says “Restricted setting”, open this app’s App info page, tap ⋮ in the top corner, choose “Allow restricted settings”, then try again.</string>
+
+    <string name="section_button">Button</string>
+    <string name="volume_up">Volume up</string>
+    <string name="volume_down">Volume down</string>
+    <string name="button_note">Single presses still change the volume, after a short delay.</string>
+
+    <string name="section_screen_off">Screen off</string>
+    <string name="screen_off">Also work when the screen is off</string>
+    <string name="screen_off_note">Experimental. Works on many phones but not all, and not while music or other audio is playing.</string>
+
+    <string name="about_title">About</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_free">This app is free. No ads, no tracking, no in-app purchases, and no internet access.</string>
+    <string name="about_author">Made by Fanis</string>
+    <string name="about_license">Free and open-source software, released under the MIT License.</string>
+    <string name="about_source">Source code:\nhttps://github.com/fanis/simple-torch-launcher</string>
+
+    <string name="service_description">Lets you double-press a volume button to turn the torch on and off.\n\nSimple Torch Launcher only reacts to volume button presses and ignores every other key. It cannot read your screen, stores nothing, and has no internet access.</string>
+</resources>

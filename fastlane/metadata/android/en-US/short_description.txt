@@ -1,0 +1,1 @@
+Double-press a volume button to switch the torch (flashlight) on and off

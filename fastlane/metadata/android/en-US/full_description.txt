@@ -1,0 +1,19 @@
+Double-press a volume button to switch the torch (flashlight) on. Double-press it again to switch it off. No need to unlock your phone or find a tile.
+
+<b>Features</b>
+<ul>
+<li>Choose volume up or volume down as the trigger.</li>
+<li>Single presses still change the volume as usual, after a short delay.</li>
+<li>Works on the lock screen.</li>
+<li>Optional: also works while the screen is off (experimental, see below).</li>
+<li>Tiny, with no ads, no tracking and no internet permission.</li>
+</ul>
+
+<b>Why an accessibility service?</b>
+Android only lets apps see volume button presses through an accessibility service. Simple Torch Launcher uses it for that alone: it only receives key events, ignores every key except the volume buttons, cannot read the screen, and stores nothing.
+
+<b>Screen off (experimental)</b>
+Android doesn't send key events to accessibility services while the screen is off. As a workaround, the app briefly presents itself as a remote media player while the screen is off, so Android sends it the volume presses. This works on many phones but not all, and not while music or other audio is playing. You can turn it off in the app.
+
+<b>Android 13 and newer</b>
+If Android shows "Restricted setting" when you try to turn on the service, open the app's App info page, tap ⋮ and choose "Allow restricted settings".
