@@ -6,7 +6,7 @@ Double-press a volume button to switch the torch (flashlight) on. Double-press i
 <li>Single presses still change the volume as usual, after a short delay.</li>
 <li>Works on the lock screen.</li>
 <li>Optional: also works while the screen is off (experimental, see below).</li>
-<li>An on/off switch in the app, and a button to test the torch.</li>
+<li>An on/off switch in the app, and a switch to test the torch.</li>
 <li>Tiny, with no ads, no tracking and no internet permission.</li>
 </ul>
 
