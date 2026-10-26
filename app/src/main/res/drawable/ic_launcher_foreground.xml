@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A torch pointing up with three light rays, drawn inside the 66dp adaptive icon safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:pathData="M54,23 L54,32 M37,29 L42,36 M71,29 L66,36"
+        android:strokeWidth="4"
+        android:strokeColor="#FFC107"
+        android:strokeLineCap="round" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,41 L68,41 L62,53 L46,53 Z" />
+
+    <!-- The body, with the button as a hole: the circle winds the opposite way. -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M49,55 L59,55 Q61,55 61,57 L61,80 Q61,82 59,82 L49,82 Q47,82 47,80 L47,57 Q47,55 49,55 Z M51,64 A3,3 0 1,0 57,64 A3,3 0 1,0 51,64 Z" />
+</vector>
