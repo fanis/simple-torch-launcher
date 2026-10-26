@@ -8,43 +8,94 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/app_name"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <Button
+                android:id="@+id/about"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="-12dp"
+                android:text="@string/about_title" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:text="@string/intro"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            style="@style/SectionHeader"
-            android:text="@string/section_status" />
+        <Switch
+            android:id="@+id/enabled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:minHeight="56dp"
+            android:text="@string/enabled"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/status"
+            android:id="@+id/accessibility_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
-            android:id="@+id/open_settings"
+            android:id="@+id/open_accessibility_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/open_accessibility_settings" />
 
-        <TextView
-            android:id="@+id/restricted_hint"
-            style="@style/Note"
-            android:text="@string/restricted_hint"
-            android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/restricted_help"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/Note"
+                android:text="@string/restricted_title"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/Note"
+                android:text="@string/restricted_help" />
+
+            <Button
+                android:id="@+id/open_app_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/open_app_info" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/torch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:minHeight="56dp" />
 
         <TextView
             style="@style/SectionHeader"
@@ -89,14 +140,6 @@
         <TextView
             style="@style/Note"
             android:text="@string/screen_off_note" />
-
-        <Button
-            android:id="@+id/about"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/about_title" />
 
     </LinearLayout>
 </ScrollView>

@@ -4,29 +4,53 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.Switch
 import android.widget.TextView
 
-/** The settings screen: service status, which button to use, and the screen-off option. */
+/** The settings screen: on/off, accessibility status, a torch test button, and the options. */
 class MainActivity : Activity() {
 
-    private lateinit var status: TextView
-    private lateinit var restrictedHint: View
+    private lateinit var torch: Torch
+    private lateinit var torchButton: Button
+    private lateinit var accessibilityStatus: TextView
+    private lateinit var restrictedHelp: View
+    private lateinit var options: List<View>
+
+    // Whether the user has been sent to the accessibility settings, so may have hit Android's
+    // "Restricted setting" block there.
+    private var openedAccessibilitySettings = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fitToSystemBars(findViewById(R.id.root))
+        openedAccessibilitySettings = savedInstanceState?.getBoolean(STATE_OPENED_SETTINGS) ?: false
 
-        status = findViewById(R.id.status)
-        restrictedHint = findViewById(R.id.restricted_hint)
+        findViewById<View>(R.id.about).setOnClickListener {
+            startActivity(Intent(this, AboutActivity::class.java))
+        }
 
-        findViewById<View>(R.id.open_settings).setOnClickListener { openAccessibilitySettings() }
+        accessibilityStatus = findViewById(R.id.accessibility_status)
+        restrictedHelp = findViewById(R.id.restricted_help)
+        findViewById<View>(R.id.open_accessibility_settings).setOnClickListener {
+            openedAccessibilitySettings = true
+            open(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        }
+        findViewById<View>(R.id.open_app_info).setOnClickListener {
+            open(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null)))
+        }
+
+        torchButton = findViewById(R.id.torch)
+        torch = Torch(this) { showTorchState() }
+        torchButton.setOnClickListener { torch.toggle() }
+        showTorchState()
 
         val button = findViewById<RadioGroup>(R.id.button)
         button.check(if (Prefs.useVolumeDown(this)) R.id.volume_down else R.id.volume_up)
@@ -40,18 +64,50 @@ class MainActivity : Activity() {
             Prefs.setScreenOffEnabled(this, checked)
         }
 
-        findViewById<View>(R.id.about).setOnClickListener {
-            startActivity(Intent(this, AboutActivity::class.java))
+        options = listOf(findViewById<View>(R.id.volume_up), findViewById<View>(R.id.volume_down), screenOff)
+        val enabled = findViewById<Switch>(R.id.enabled)
+        enabled.isChecked = Prefs.enabled(this)
+        enabled.setOnCheckedChangeListener { _, checked ->
+            Prefs.setEnabled(this, checked)
+            showOptionsEnabled(checked)
         }
+        showOptionsEnabled(enabled.isChecked)
     }
 
     override fun onResume() {
         super.onResume()
-        val enabled = isServiceEnabled()
-        status.setText(if (enabled) R.string.status_on else R.string.status_off)
-        // Android 13+ blocks accessibility for apps it considers sideloaded until the user allows it.
-        restrictedHint.visibility =
-            if (!enabled && Build.VERSION.SDK_INT >= 33) View.VISIBLE else View.GONE
+        val serviceOn = isServiceEnabled()
+        accessibilityStatus.setText(if (serviceOn) R.string.accessibility_on else R.string.accessibility_off)
+        // Android 13+ may block accessibility for apps it considers sideloaded. There is no public way to
+        // tell whether that happened, so offer help once the user has tried and it's still off.
+        restrictedHelp.visibility =
+            if (!serviceOn && openedAccessibilitySettings && Build.VERSION.SDK_INT >= 33) View.VISIBLE
+            else View.GONE
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(STATE_OPENED_SETTINGS, openedAccessibilitySettings)
+    }
+
+    override fun onDestroy() {
+        torch.release()
+        super.onDestroy()
+    }
+
+    private fun showTorchState() {
+        torchButton.isEnabled = torch.isAvailable
+        torchButton.setText(
+            when {
+                !torch.isAvailable -> R.string.torch_missing
+                torch.isOn -> R.string.torch_turn_off
+                else -> R.string.torch_turn_on
+            }
+        )
+    }
+
+    private fun showOptionsEnabled(enabled: Boolean) {
+        options.forEach { it.isEnabled = enabled }
     }
 
     private fun isServiceEnabled(): Boolean {
@@ -62,10 +118,14 @@ class MainActivity : Activity() {
         return enabled.split(':').any { ComponentName.unflattenFromString(it) == service }
     }
 
-    private fun openAccessibilitySettings() {
+    private fun open(intent: Intent) {
         try {
-            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            startActivity(intent)
         } catch (_: ActivityNotFoundException) {
         }
+    }
+
+    private companion object {
+        const val STATE_OPENED_SETTINGS = "opened_accessibility_settings"
     }
 }

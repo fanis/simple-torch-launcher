@@ -84,9 +84,10 @@ class ScreenOffVolumeKeys(
         setSessionActive(false)
     }
 
-    private fun update() {
+    /** Creates or drops the session to match the screen, audio and settings. */
+    fun update() {
         setSessionActive(
-            screenOff && Prefs.screenOffEnabled(context) &&
+            screenOff && Prefs.enabled(context) && Prefs.screenOffEnabled(context) &&
                 !audio.isMusicActive && audio.mode == AudioManager.MODE_NORMAL
         )
     }
