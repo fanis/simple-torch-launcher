@@ -41,14 +41,18 @@ class Torch(context: Context, private val onChange: (isOn: Boolean) -> Unit = {}
         cameraManager.registerTorchCallback(callback, Handler(Looper.getMainLooper()))
     }
 
-    fun toggle() {
-        val id = cameraId ?: return
-        try {
+    /** Returns whether the request went through. [onChange] reports the new state shortly after. */
+    fun toggle(): Boolean {
+        val id = cameraId ?: return false
+        return try {
             cameraManager.setTorchMode(id, !isOn)
+            true
         } catch (_: CameraAccessException) {
             // The camera is busy, e.g. another app is using it.
+            false
         } catch (_: IllegalArgumentException) {
             // The camera went away.
+            false
         }
     }
 

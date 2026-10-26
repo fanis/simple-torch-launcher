@@ -12,8 +12,7 @@
     <string name="restricted_help">Android blocks this for some apps installed outside an app store. Open App info, tap ⋮ in the top corner and choose “Allow restricted settings”. Then turn Simple Torch Launcher on in the accessibility settings again.</string>
     <string name="open_app_info">Open App info</string>
 
-    <string name="torch_turn_on">Turn torch on</string>
-    <string name="torch_turn_off">Turn torch off</string>
+    <string name="torch_test">Test the torch</string>
     <string name="torch_missing">No torch found on this device</string>
 
     <string name="section_button">Button</string>

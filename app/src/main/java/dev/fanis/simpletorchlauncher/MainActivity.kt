@@ -9,16 +9,15 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
-import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.Switch
 import android.widget.TextView
 
-/** The settings screen: on/off, accessibility status, a torch test button, and the options. */
+/** The settings screen: on/off, accessibility status, a torch test switch, and the options. */
 class MainActivity : Activity() {
 
     private lateinit var torch: Torch
-    private lateinit var torchButton: Button
+    private lateinit var torchSwitch: Switch
     private lateinit var accessibilityStatus: TextView
     private lateinit var restrictedHelp: View
     private lateinit var options: List<View>
@@ -47,9 +46,10 @@ class MainActivity : Activity() {
             open(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null)))
         }
 
-        torchButton = findViewById(R.id.torch)
+        torchSwitch = findViewById(R.id.torch)
         torch = Torch(this) { showTorchState() }
-        torchButton.setOnClickListener { torch.toggle() }
+        // The switch flips itself on click; put it back if the torch didn't take the request.
+        torchSwitch.setOnClickListener { if (!torch.toggle()) showTorchState() }
         showTorchState()
 
         val button = findViewById<RadioGroup>(R.id.button)
@@ -96,14 +96,9 @@ class MainActivity : Activity() {
     }
 
     private fun showTorchState() {
-        torchButton.isEnabled = torch.isAvailable
-        torchButton.setText(
-            when {
-                !torch.isAvailable -> R.string.torch_missing
-                torch.isOn -> R.string.torch_turn_off
-                else -> R.string.torch_turn_on
-            }
-        )
+        torchSwitch.isEnabled = torch.isAvailable
+        torchSwitch.isChecked = torch.isOn
+        torchSwitch.setText(if (torch.isAvailable) R.string.torch_test else R.string.torch_missing)
     }
 
     private fun showOptionsEnabled(enabled: Boolean) {
