@@ -83,7 +83,7 @@ is turned on in the accessibility settings.
 
 ```sh
 ./gradlew assembleDebug     # installable debug build
-./gradlew assembleRelease   # unsigned release build
+./gradlew assembleRelease   # release build, signed if keystore.properties is set up
 ```
 
 Requires JDK 17 or newer and the Android SDK (platform 37). There are no third-party dependencies.
@@ -111,6 +111,8 @@ keytool -genkeypair -v -keystore simple-torch-launcher-release.jks -alias simple
 `ANDROID_RELEASE_KEY_ALIAS` is `simple-torch-launcher`. Keep a backup of the keystore and its
 passwords outside the repo: updates must be signed with the same key. F-Droid builds and signs
 its own APKs, so copies from F-Droid and from GitHub can't update each other.
+
+To build a signed release APK locally with the same key, put the keystore in `release/` and copy `keystore.properties.example` to `keystore.properties` at the repo root, with the real passwords. Git ignores both. `./gradlew assembleRelease` then writes a signed `app/build/outputs/apk/release/app-release.apk`. Without `keystore.properties` the release APK stays unsigned, as on GitHub Actions and F-Droid.
 
 ## Contributing
 
