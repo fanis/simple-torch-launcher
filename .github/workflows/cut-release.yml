@@ -1,0 +1,169 @@
+name: Cut Release
+
+# Manually triggered release: bumps the app version, moves the [Unreleased] changelog section
+# under the new version, writes F-Droid's release notes, builds and lints, commits, tags, and
+# publishes a GitHub Release with the APK attached (through release.yml).
+#
+# Trigger it from the Actions tab, or from Claude Code with the GitHub Actions trigger tool on
+# cut-release.yml. It needs release notes under "## [Unreleased]" in CHANGELOG.md.
+#
+# The release is published by calling release.yml from here, because tags pushed with the
+# built-in GITHUB_TOKEN don't trigger other workflows. release.yml also runs on its own for
+# tags pushed by hand.
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump type (ignored if an explicit version is given)'
+        type: choice
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+      version:
+        description: 'Explicit version (e.g. 1.0.0), overrides the bump type'
+        required: false
+        type: string
+      summary:
+        description: 'Short release summary (optional, used in the commit message)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cut-release
+  cancel-in-progress: false
+
+jobs:
+  cut:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.VERSION }}
+    steps:
+      - name: Only release from the default branch
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "::error::Run this workflow on ${{ github.event.repository.default_branch }}, not ${{ github.ref_name }}."
+          exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Require release notes under [Unreleased]
+        run: |
+          CONTENT=$(awk '
+            /^## \[Unreleased\]/ { found=1; next }
+            /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md | grep -v '^[[:space:]]*$' || true)
+          if [ -z "$CONTENT" ]; then
+            echo "::error::CHANGELOG.md has no notes under [Unreleased]. Add release notes before cutting a release."
+            exit 1
+          fi
+
+      - name: Compute new version
+        id: version
+        env:
+          BUMP: ${{ inputs.bump }}
+          EXPLICIT: ${{ inputs.version }}
+        run: |
+          set -e
+          CURRENT=$(sed -nE 's/^ *versionName = "([0-9]+\.[0-9]+\.[0-9]+)"$/\1/p' app/build.gradle.kts)
+          CODE=$(sed -nE 's/^ *versionCode = ([0-9]+)$/\1/p' app/build.gradle.kts)
+          if [ -z "$CURRENT" ] || [ -z "$CODE" ]; then
+            echo "::error::Couldn't read versionName and versionCode from app/build.gradle.kts."
+            exit 1
+          fi
+          if [ -n "$EXPLICIT" ]; then
+            if ! echo "$EXPLICIT" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+              echo "::error::The version must look like 1.2.3, not $EXPLICIT."
+              exit 1
+            fi
+            VERSION=$EXPLICIT
+          else
+            IFS=. read -r MAJOR MINOR PATCH <<< "$CURRENT"
+            case "$BUMP" in
+              major) VERSION="$((MAJOR + 1)).0.0" ;;
+              minor) VERSION="$MAJOR.$((MINOR + 1)).0" ;;
+              *) VERSION="$MAJOR.$MINOR.$((PATCH + 1))" ;;
+            esac
+          fi
+          # Each release needs a new versionCode, but the current one is free to reuse while its
+          # version was never released (as with the very first release).
+          if git ls-remote --exit-code --tags origin "refs/tags/$CURRENT" > /dev/null 2>&1; then
+            CODE=$((CODE + 1))
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "CODE=$CODE" >> "$GITHUB_OUTPUT"
+          echo "Releasing $VERSION (version code $CODE), up from $CURRENT"
+
+      - name: Fail if the tag already exists
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          if git ls-remote --exit-code --tags origin "refs/tags/$VERSION" > /dev/null 2>&1; then
+            echo "::error::Tag $VERSION already exists."
+            exit 1
+          fi
+
+      - name: Update version, changelog and F-Droid release notes
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          CODE: ${{ steps.version.outputs.CODE }}
+        run: |
+          set -e
+          sed -E -i "s/^( *versionName = )\"[^\"]*\"$/\1\"$VERSION\"/" app/build.gradle.kts
+          sed -E -i "s/^( *versionCode = )[0-9]+$/\1$CODE/" app/build.gradle.kts
+          grep -q "versionName = \"$VERSION\"" app/build.gradle.kts
+          grep -q "versionCode = $CODE$" app/build.gradle.kts
+
+          # Move the [Unreleased] notes under the new version, leaving a fresh empty [Unreleased]
+          # section above it for the next release's notes
+          sed -i "s|^## \[Unreleased\]|## [Unreleased]\n\n## [$VERSION] - $(date -u +%Y-%m-%d)|" CHANGELOG.md
+          grep -q "^## \[$VERSION\]" CHANGELOG.md
+
+          python3 scripts/fdroid_changelog.py "$VERSION" "$CODE"
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Install the Android 17 SDK platform
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.0" "build-tools;37.0.0" > /dev/null
+
+      # Catch a broken build before anything is committed or tagged.
+      - name: Build and lint
+        run: ./gradlew assembleRelease lint
+
+      - name: Commit and tag
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          CODE: ${{ steps.version.outputs.CODE }}
+          SUMMARY: ${{ inputs.summary }}
+        run: |
+          set -e
+          if [ -n "$SUMMARY" ]; then
+            MSG="Release v$VERSION: $SUMMARY"
+          else
+            MSG="Release v$VERSION"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/build.gradle.kts CHANGELOG.md "fastlane/metadata/android/en-US/changelogs/$CODE.txt"
+          git commit -m "$MSG"
+          git tag "$VERSION"
+          git push origin HEAD
+          git push origin "$VERSION"
+
+  publish:
+    needs: cut
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.cut.outputs.version }}
+    secrets: inherit

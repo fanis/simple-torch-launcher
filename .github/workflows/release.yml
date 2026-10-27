@@ -1,0 +1,102 @@
+name: Release
+
+# Builds the release APK for a version tag, signs it if a signing key is set up, and publishes
+# a GitHub Release with that version's CHANGELOG.md section as its notes.
+#
+# Runs on its own for tags pushed by hand, and is called by cut-release.yml, whose tags (pushed
+# with the built-in GITHUB_TOKEN) don't trigger other workflows.
+#
+# Signing uses four repository secrets: SIGNING_KEYSTORE (the keystore file, base64-encoded),
+# SIGNING_KEYSTORE_PASSWORD, SIGNING_KEY_ALIAS and SIGNING_KEY_PASSWORD. Without them the
+# unsigned APK is attached instead, which Android won't install.
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_call:
+    inputs:
+      tag:
+        description: 'The version tag to release, e.g. 1.0.0'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: refs/tags/${{ env.TAG }}
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Install the Android 17 SDK platform
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.0" "build-tools;37.0.0" > /dev/null
+
+      - name: Build the release APK
+        run: ./gradlew assembleRelease
+
+      - name: Sign the APK
+        env:
+          KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
+          KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: |
+          set -e
+          UNSIGNED=app/build/outputs/apk/release/app-release-unsigned.apk
+          mkdir -p dist
+          if [ -z "$KEYSTORE" ]; then
+            echo "::warning::No signing key set up, so the attached APK is unsigned and can't be installed. See Releasing in README.md."
+            cp "$UNSIGNED" "dist/simple-torch-launcher-$TAG-unsigned.apk"
+            exit 0
+          fi
+          echo "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/release.jks"
+          APKSIGNER="$ANDROID_HOME/build-tools/37.0.0/apksigner"
+          "$APKSIGNER" sign --ks "$RUNNER_TEMP/release.jks" --ks-pass env:KEYSTORE_PASSWORD \
+            --ks-key-alias "$KEY_ALIAS" --key-pass env:KEY_PASSWORD \
+            --out "dist/simple-torch-launcher-$TAG.apk" "$UNSIGNED"
+          rm "$RUNNER_TEMP/release.jks"
+          "$APKSIGNER" verify --print-certs "dist/simple-torch-launcher-$TAG.apk"
+
+      - name: Extract changelog for this version
+        id: changelog
+        run: |
+          CHANGELOG=$(awk -v ver="$TAG" '
+            /^## \[/ {
+              if (found) exit
+              if ($0 ~ "\\[" ver "\\]") found=1
+              next
+            }
+            found { print }
+          ' CHANGELOG.md)
+          if [ -z "$(echo "$CHANGELOG" | tr -d '[:space:]')" ]; then
+            echo "::error::CHANGELOG.md has no notes for $TAG."
+            exit 1
+          fi
+          echo "CHANGELOG<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$CHANGELOG" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: v${{ env.TAG }}
+          body: ${{ steps.changelog.outputs.CHANGELOG }}
+          files: dist/*.apk
+          fail_on_unmatched_files: true
+          draft: false
+          prerelease: false
