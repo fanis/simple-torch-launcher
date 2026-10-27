@@ -66,13 +66,16 @@
             android:layout_marginTop="8dp"
             android:text="@string/set_up" />
 
-        <Switch
+        <ToggleButton
             android:id="@+id/torch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="48dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:layout_marginTop="24dp"
+            android:background="@drawable/torch_button"
+            android:minHeight="56dp"
+            android:textColor="@color/torch_button_text"
+            android:textOff="@string/torch_test"
+            android:textOn="@string/torch_test" />
 
         <TextView
             style="@style/SectionHeader"

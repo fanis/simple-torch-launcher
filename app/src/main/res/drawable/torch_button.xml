@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A two-state button: filled with the accent colour while the torch is on. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="4dp"
+    android:insetTop="6dp"
+    android:insetRight="4dp"
+    android:insetBottom="6dp">
+    <ripple android:color="?android:attr/colorControlHighlight">
+        <item>
+            <selector>
+                <item android:state_checked="true">
+                    <shape>
+                        <solid android:color="?android:attr/colorAccent" />
+                        <corners android:radius="4dp" />
+                    </shape>
+                </item>
+                <item>
+                    <shape>
+                        <solid android:color="?android:attr/colorButtonNormal" />
+                        <corners android:radius="4dp" />
+                    </shape>
+                </item>
+            </selector>
+        </item>
+    </ripple>
+</inset>

@@ -9,7 +9,7 @@
     <string name="accessibility_off">Accessibility setting: off. The app needs it to see volume button presses.</string>
     <string name="set_up">Set up</string>
     <string name="setup_title">Set up Simple Torch Launcher</string>
-    <string name="setup_why">Android only lets an app see volume button presses if you turn it on in the accessibility settings. Every app that reacts to hardware buttons needs this.</string>
+    <string name="setup_why">To see volume button presses, an app has to be turned on in the accessibility settings. Every app that reacts to hardware buttons needs this.\n\nAndroid then passes it every hardware key press, like the volume buttons or a connected keyboard. It never gets the power button, your touches, or typing on the on-screen keyboard.</string>
     <string name="setup_promise_title">Our promise</string>
     <string-array name="setup_promises">
         <item>It only reacts to the volume button you choose. Every other key goes straight back to Android, untouched.</item>
@@ -60,5 +60,5 @@
     <string name="about_license">Free and open-source software, released under the MIT License.</string>
     <string name="about_source">Source code:\nhttps://github.com/fanis/simple-torch-launcher</string>
 
-    <string name="service_description">Lets you double-press a volume button to turn the torch on and off.\n\nSimple Torch Launcher only reacts to volume button presses and ignores every other key. It doesn’t read your screen, keeps nothing but its own settings, and has no internet access.</string>
+    <string name="service_description">Lets you double-press a volume button to turn the torch on and off.\n\nAndroid passes the app every hardware key press, like the volume buttons or a connected keyboard, but never the power button, touches or on-screen typing. The app only reacts to your chosen volume button and hands every other key straight back. It doesn’t read your screen, keeps nothing but its own settings, and has no internet access.</string>
 </resources>
