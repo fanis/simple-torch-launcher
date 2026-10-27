@@ -4,6 +4,8 @@
 
 Double-press a volume button to switch the torch (flashlight) on. Double-press it again to switch it off.
 
+![Setup, the main screen in light and dark mode, and About](screenshots/hero.jpg)
+
 - Pick volume up or volume down as the trigger.
 - Single presses still change the volume as usual, after a short delay (400 ms).
 - Works on the lock screen, and optionally while the screen is off (experimental).
@@ -25,6 +27,8 @@ Coming to F-Droid. Until then, get the APK from
    floating guide shows the steps over the settings. Once it's on, the app brings you back to its
    setup screen, where you can try a double-press straight away.
 3. Pick the button you want to use.
+
+![The floating guide's steps over Android's accessibility settings](screenshots/guide.jpg)
 
 On Android 13 and newer, Android may block the switch with "Restricted setting". Open the app's
 **App info** page, tap **⋮** and choose **Allow restricted settings**, then try again. The app shows
