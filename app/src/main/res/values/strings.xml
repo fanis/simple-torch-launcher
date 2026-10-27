@@ -10,25 +10,18 @@
     <string name="accessibility_off">Accessibility setting: off</string>
     <string name="accessibility_off_summary">The app needs it to see volume button presses.</string>
     <string name="set_up">Set up</string>
-    <string name="setup_title">Set up Simple Torch Launcher</string>
-    <string name="setup_why">To see volume button presses, an app has to be turned on in the accessibility settings. Every app that reacts to hardware buttons needs this.\n\nAndroid then passes it every hardware key press, like the volume buttons or a connected keyboard. It never gets the power button, your touches, or typing on the on-screen keyboard.</string>
+    <string name="setup_headline">Double-press a volume button to toggle the torch</string>
+    <string name="setup_why">It works on the lock screen too. To notice those presses, the app needs to be turned on in Android’s accessibility settings.</string>
     <string name="setup_promise_title">Our promise</string>
     <string-array name="setup_promises">
-        <item>It only reacts to the volume button you choose. Every other key goes straight back to Android, untouched.</item>
-        <item>It doesn’t read your screen, your notifications or what you type.</item>
-        <item>It keeps nothing but its own settings, and it has no internet permission, so it can’t go online.</item>
-        <item>You can switch it off at any time, in this app or in Android’s settings.</item>
-        <item>It’s open source, so anyone can check all of this.</item>
+        <item>Only reacts to your chosen volume button. Other keys pass straight through.</item>
+        <item>Never gets the power button, your touches or on-screen typing.</item>
+        <item>Doesn’t read your screen. No internet access. Collects nothing.</item>
+        <item>Open source, and you can switch it off any time.</item>
     </string-array>
-    <string name="setup_warning_title">About Android’s warning</string>
-    <string name="setup_warning">Android will ask whether to give the app full control of your device. It shows that same warning for every accessibility app, because some of them could do a lot. Simple Torch Launcher only asks Android for key presses.</string>
-    <string name="setup_steps_title">Turn it on</string>
-    <string-array name="setup_steps">
-        <item>Tap the button below.</item>
-        <item>Find Simple Torch Launcher. It’s often under “Downloaded apps” or “Installed apps”.</item>
-        <item>Turn it on, then tap Allow.</item>
-        <item>Come back to this app.</item>
-    </string-array>
+    <string name="setup_warning_title">Android’s warning</string>
+    <string name="setup_warning">Android asks the same “full control” question for every accessibility app. This one only uses key presses.</string>
+    <string name="setup_steps">In the settings: tap Simple Torch Launcher, turn it on, then tap Allow.</string>
     <string name="open_accessibility_settings">Open accessibility settings</string>
     <string name="setup_not_now">Not now</string>
     <string name="setup_done_title">You’re all set</string>
@@ -37,8 +30,6 @@
     <string name="setup_try_on">It works! Double-press again to turn the torch off.</string>
     <string name="setup_try_off">Torch off. That’s all there is to it.</string>
     <string name="setup_finish">Done</string>
-    <string name="step_number">%1$d.</string>
-    <string name="bullet" translatable="false">•</string>
     <string name="guide_steps">Find Simple Torch Launcher, turn it on, then tap Allow.</string>
     <string name="guide_step_find">Tap Simple Torch Launcher</string>
     <string name="guide_step_switch">Turn it on</string>
