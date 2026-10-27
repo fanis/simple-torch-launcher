@@ -81,4 +81,4 @@ Requires JDK 17 or newer and the Android SDK (platform 37). The release APK is u
 
 ## License
 
-[MIT](LICENSE) © 2026 Fanis
+[MIT](LICENSE) © 2026 Fanis Hatzidakis

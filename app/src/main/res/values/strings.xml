@@ -59,11 +59,15 @@
     <string name="screen_off_note">Experimental. Works on many phones but not all, and not while music or other audio is playing.</string>
 
     <string name="about_title">About</string>
-    <string name="about_version">Version %1$s</string>
-    <string name="about_free">This app is free. No ads, no tracking, no in-app purchases, and no internet access.</string>
-    <string name="about_author">Made by Fanis</string>
-    <string name="about_license">Free and open-source software, released under the MIT License.</string>
-    <string name="about_source">Source code:\nhttps://github.com/fanis/simple-torch-launcher</string>
+    <string name="about_tagline">Double-press a volume button to toggle the torch.</string>
+    <string name="about_free">Free and open source. No ads, no tracking, no in-app purchases, and no internet access.</string>
+    <string name="about_made_by">Made by</string>
+    <string name="about_author" translatable="false">Fanis Hatzidakis</string>
+    <string name="about_source_title">Source code</string>
+    <string name="about_source" translatable="false">github.com/fanis/simple-torch-launcher</string>
+    <string name="about_license_title">License</string>
+    <string name="about_license">MIT License</string>
+    <string name="about_version_title">Version</string>
 
     <string name="service_summary">Double-press a volume button to toggle the torch</string>
     <string name="service_description">Lets you double-press a volume button to turn the torch on and off.\n\nAndroid passes the app every hardware key press, like the volume buttons or a connected keyboard, but never the power button, touches or on-screen typing. The app only reacts to your chosen volume button and hands every other key straight back. It doesn’t read your screen, keeps nothing but its own settings, and has no internet access.</string>
