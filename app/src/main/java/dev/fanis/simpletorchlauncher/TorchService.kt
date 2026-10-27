@@ -2,11 +2,15 @@ package dev.fanis.simpletorchlauncher
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.media.AudioManager
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.provider.Settings
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
 
@@ -45,6 +49,16 @@ class TorchService : AccessibilityService(), SharedPreferences.OnSharedPreferenc
         screenOffKeys = ScreenOffVolumeKeys(this, ::onScreenOffPress).also { it.start() }
         Prefs.registerListener(this, this)
         updateKeyFiltering()
+
+        // The user just turned us on from the setup screen: take them back to it.
+        if (SetupActivity.awaitingService) {
+            SetupActivity.awaitingService = false
+            startActivity(
+                Intent(this, SetupActivity::class.java).addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                )
+            )
+        }
     }
 
     override fun onDestroy() {
@@ -138,8 +152,17 @@ class TorchService : AccessibilityService(), SharedPreferences.OnSharedPreferenc
     private fun directionOf(keyCode: Int) =
         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) AudioManager.ADJUST_RAISE else AudioManager.ADJUST_LOWER
 
-    private companion object {
-        const val DOUBLE_PRESS_MS = 400L
-        const val MIN_PRESS_GAP_MS = 60L
+    companion object {
+        private const val DOUBLE_PRESS_MS = 400L
+        private const val MIN_PRESS_GAP_MS = 60L
+
+        /** Whether the user has turned this service on in the accessibility settings. */
+        fun isEnabled(context: Context): Boolean {
+            val enabled = Settings.Secure.getString(
+                context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+            ) ?: return false
+            val service = ComponentName(context, TorchService::class.java)
+            return enabled.split(':').any { ComponentName.unflattenFromString(it) == service }
+        }
     }
 }

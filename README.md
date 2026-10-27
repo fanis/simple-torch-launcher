@@ -11,16 +11,24 @@ Double-press a volume button to switch the torch (flashlight) on. Double-press i
 
 ## Setup
 
-1. Install and open the app.
-2. Tap **Open accessibility settings** and turn on **Simple Torch Launcher**. Android only lets apps see
-   volume button presses through an accessibility service. This one only asks for key events, and
-   ignores every key except the volume buttons. It can't read the screen.
+1. Install and open the app. A setup screen explains why it needs an accessibility service, what it
+   promises not to do, and what Android's "full control" warning means.
+2. Turn on **Simple Torch Launcher** in the accessibility settings. The app brings you back to its
+   setup screen, where you can try a double-press straight away.
 3. Pick the button you want to use.
 
 On Android 13 and newer, Android may block the switch with "Restricted setting". Open the app's
 **App info** page, tap **⋮** and choose **Allow restricted settings**, then try again. The app shows
 these steps, with a button to App info, if accessibility is still off after you've been to the
 settings. Android has no public way for an app to check whether it is restricted.
+
+## Privacy
+
+- The app only reacts to the volume button you choose. Every other key goes straight back to
+  Android, untouched.
+- It asks Android for key events only: no screen content, no accessibility events, no gestures.
+- It keeps nothing but its own settings, and has no internet permission.
+- It's open source, so all of this can be checked.
 
 ## How it works
 

@@ -6,8 +6,37 @@
 
     <string name="enabled">Double-press to toggle the torch</string>
     <string name="accessibility_on">Accessibility setting: on</string>
-    <string name="accessibility_off">Accessibility setting: off. Turn on Simple Torch Launcher in your accessibility settings so the app can see volume button presses.</string>
+    <string name="accessibility_off">Accessibility setting: off. The app needs it to see volume button presses.</string>
+    <string name="set_up">Set up</string>
+    <string name="setup_title">Set up Simple Torch Launcher</string>
+    <string name="setup_why">Android only lets an app see volume button presses if you turn it on in the accessibility settings. Every app that reacts to hardware buttons needs this.</string>
+    <string name="setup_promise_title">Our promise</string>
+    <string-array name="setup_promises">
+        <item>It only reacts to the volume button you choose. Every other key goes straight back to Android, untouched.</item>
+        <item>It doesn’t read your screen, your notifications or what you type.</item>
+        <item>It keeps nothing but its own settings, and it has no internet permission, so it can’t go online.</item>
+        <item>You can switch it off at any time, in this app or in Android’s settings.</item>
+        <item>It’s open source, so anyone can check all of this.</item>
+    </string-array>
+    <string name="setup_warning_title">About Android’s warning</string>
+    <string name="setup_warning">Android will ask whether to give the app full control of your device. It shows that same warning for every accessibility app, because some of them could do a lot. Simple Torch Launcher only asks Android for key presses.</string>
+    <string name="setup_steps_title">Turn it on</string>
+    <string-array name="setup_steps">
+        <item>Tap the button below.</item>
+        <item>Find Simple Torch Launcher. It’s often under “Downloaded apps” or “Installed apps”.</item>
+        <item>Turn it on, then tap Allow.</item>
+        <item>Come back to this app.</item>
+    </string-array>
     <string name="open_accessibility_settings">Open accessibility settings</string>
+    <string name="setup_not_now">Not now</string>
+    <string name="setup_done_title">You’re all set</string>
+    <string name="setup_try_up">Try it now: double-press volume up.</string>
+    <string name="setup_try_down">Try it now: double-press volume down.</string>
+    <string name="setup_try_on">It works! Double-press again to turn the torch off.</string>
+    <string name="setup_try_off">Torch off. That’s all there is to it.</string>
+    <string name="setup_finish">Done</string>
+    <string name="step_number">%1$d.</string>
+    <string name="bullet" translatable="false">•</string>
     <string name="restricted_title">Seeing “Restricted setting”?</string>
     <string name="restricted_help">Android blocks this for some apps installed outside an app store. Open App info, tap ⋮ in the top corner and choose “Allow restricted settings”. Then turn Simple Torch Launcher on in the accessibility settings again.</string>
     <string name="open_app_info">Open App info</string>
@@ -31,5 +60,5 @@
     <string name="about_license">Free and open-source software, released under the MIT License.</string>
     <string name="about_source">Source code:\nhttps://github.com/fanis/simple-torch-launcher</string>
 
-    <string name="service_description">Lets you double-press a volume button to turn the torch on and off.\n\nSimple Torch Launcher only reacts to volume button presses and ignores every other key. It cannot read your screen, stores nothing, and has no internet access.</string>
+    <string name="service_description">Lets you double-press a volume button to turn the torch on and off.\n\nSimple Torch Launcher only reacts to volume button presses and ignores every other key. It doesn’t read your screen, keeps nothing but its own settings, and has no internet access.</string>
 </resources>
