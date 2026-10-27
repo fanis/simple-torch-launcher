@@ -7,9 +7,3 @@ local.properties
 captures/
 .externalNativeBuild/
 .cxx/
-
-# Release signing: the keystore and its passwords never go in git
-*.jks
-*.keystore
-keystore.properties
-key.properties
