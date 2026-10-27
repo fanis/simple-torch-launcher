@@ -97,16 +97,19 @@ type or enter a version. The workflow bumps the version, moves the notes under i
 release notes, builds, commits, tags `X.Y.Z` and publishes a GitHub Release with the APK.
 
 The APK is signed with your own key, kept in four repository secrets (Settings → Secrets and
-variables → Actions): `SIGNING_KEYSTORE`, `SIGNING_KEYSTORE_PASSWORD`, `SIGNING_KEY_ALIAS` and
-`SIGNING_KEY_PASSWORD`. To create the key once, with the JDK's `keytool`:
+variables → Actions): `ANDROID_RELEASE_KEYSTORE_BASE64`, `ANDROID_RELEASE_STORE_PASSWORD`,
+`ANDROID_RELEASE_KEY_ALIAS` and `ANDROID_RELEASE_KEY_PASSWORD`. To create the key once, with the
+JDK's `keytool`:
 
 ```sh
-keytool -genkeypair -v -keystore release.jks -alias simple-torch-launcher -keyalg RSA -keysize 4096 -validity 10000
+keytool -genkeypair -v -keystore simple-torch-launcher-release.jks -alias simple-torch-launcher -keyalg RSA -keysize 4096 -validity 10000
 ```
 
-`SIGNING_KEYSTORE` is the file, base64-encoded (`base64 -w0 release.jks`, or in PowerShell
-`[Convert]::ToBase64String([IO.File]::ReadAllBytes("release.jks"))`). Keep a backup of
-`release.jks` and its passwords: updates must be signed with the same key. F-Droid builds and signs
+`ANDROID_RELEASE_KEYSTORE_BASE64` is the file, base64-encoded
+(`base64 -w0 simple-torch-launcher-release.jks`, or in PowerShell
+`[Convert]::ToBase64String([IO.File]::ReadAllBytes("simple-torch-launcher-release.jks"))`), and
+`ANDROID_RELEASE_KEY_ALIAS` is `simple-torch-launcher`. Keep a backup of the keystore and its
+passwords outside the repo: updates must be signed with the same key. F-Droid builds and signs
 its own APKs, so copies from F-Droid and from GitHub can't update each other.
 
 ## Contributing

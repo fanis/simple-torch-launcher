@@ -6,9 +6,10 @@ name: Release
 # Runs on its own for tags pushed by hand, and is called by cut-release.yml, whose tags (pushed
 # with the built-in GITHUB_TOKEN) don't trigger other workflows.
 #
-# Signing uses four repository secrets: SIGNING_KEYSTORE (the keystore file, base64-encoded),
-# SIGNING_KEYSTORE_PASSWORD, SIGNING_KEY_ALIAS and SIGNING_KEY_PASSWORD. Without them the
-# unsigned APK is attached instead, which Android won't install.
+# Signing uses four repository secrets, named as in the owner's other Android apps:
+# ANDROID_RELEASE_KEYSTORE_BASE64 (the keystore file, base64-encoded),
+# ANDROID_RELEASE_STORE_PASSWORD, ANDROID_RELEASE_KEY_ALIAS and ANDROID_RELEASE_KEY_PASSWORD.
+# Without them the unsigned APK is attached instead, which Android won't install.
 
 on:
   push:
@@ -50,10 +51,10 @@ jobs:
 
       - name: Sign the APK
         env:
-          KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
-          KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          KEYSTORE: ${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_RELEASE_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
         run: |
           set -e
           UNSIGNED=app/build/outputs/apk/release/app-release-unsigned.apk
