@@ -9,6 +9,7 @@ object Prefs {
     private const val KEY_ENABLED = "enabled"
     private const val KEY_USE_VOLUME_DOWN = "use_volume_down"
     private const val KEY_SCREEN_OFF = "screen_off"
+    private const val KEY_LOCK_SCREEN_ONLY = "lock_screen_only"
 
     private fun prefs(context: Context) =
         context.getSharedPreferences("settings", Context.MODE_PRIVATE)
@@ -39,4 +40,10 @@ object Prefs {
 
     fun setScreenOffEnabled(context: Context, value: Boolean) =
         prefs(context).edit().putBoolean(KEY_SCREEN_OFF, value).apply()
+
+    fun lockScreenOnly(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_LOCK_SCREEN_ONLY, false)
+
+    fun setLockScreenOnly(context: Context, value: Boolean) =
+        prefs(context).edit().putBoolean(KEY_LOCK_SCREEN_ONLY, value).apply()
 }

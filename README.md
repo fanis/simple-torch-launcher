@@ -9,6 +9,8 @@ Double-press a volume button to switch the torch (flashlight) on. Double-press i
 - Pick volume up or volume down as the trigger.
 - Single presses still change the volume as usual, after a short delay (400 ms).
 - Works on the lock screen, and optionally while the screen is off (experimental).
+- Optionally only on the lock screen, so apps get the button as usual once the phone is unlocked.
+- Steps aside while the camera is in use, so the button still works as a camera shutter.
 - An on/off switch in the app, and a button to test the torch.
 - Free and open source (MIT). No ads, no tracking, no internet permission, no dependencies.
 - Android 6.0 (API 23) and newer, targeting Android 17 (API 37).
@@ -54,7 +56,9 @@ Android's accessibility settings.
 - **Screen on (including the lock screen):** the accessibility service sees every press of the chosen
   button and holds it back for 400 ms. If a second press follows, the torch toggles and the volume stays
   as it was. If not, the press is replayed as a normal volume change. Holding the button still ramps the
-  volume.
+  volume. While a camera is in use, or the phone is unlocked with **Only work on the lock screen** on,
+  presses go to apps untouched instead. While the torch is on, the shortcut always works, so you can
+  turn it off.
 - **Screen off (experimental):** Android doesn't send key events to accessibility services while the
   screen is off. Instead, while the screen is off and nothing is playing, the app keeps a media session
   that claims to control a remote player's volume, so Android reports volume presses to it. This
@@ -74,8 +78,10 @@ is turned on in the accessibility settings.
 
 ## Limitations
 
-- Apps that use the chosen volume button for something else, like a camera shutter or turning pages,
-  get a volume change instead while the service is on.
+- Apps that use the chosen volume button for something else, like turning pages or snoozing an alarm,
+  get a volume change instead while the service is on. Camera apps are fine, since the app steps aside
+  while a camera is in use. To keep the button for apps whenever the phone is unlocked, turn on
+  **Only work on the lock screen**.
 - The torch can't be switched on while another app is using the camera.
 - If Android's Advanced Protection mode is on, it may block this service, because it isn't declared as
   an accessibility tool.

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- An option to only work on the lock screen, so apps get the volume button as usual once the phone is unlocked.
+
+### Changed
+- While a camera is in use, the volume button goes to the app untouched, so it still works as a camera shutter.
+- While the torch is on, a double-press always turns it off, even in those cases.
+
 ## [1.0.0] - 2026-10-27
 
 ### Added

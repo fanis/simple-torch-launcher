@@ -157,6 +157,22 @@
 
         <TextView
             style="@style/SectionHeader"
+            android:text="@string/section_lock_screen" />
+
+        <Switch
+            android:id="@+id/lock_screen_only"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/lock_screen_only"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            style="@style/Note"
+            android:text="@string/lock_screen_only_note" />
+
+        <TextView
+            style="@style/SectionHeader"
             android:text="@string/section_screen_off" />
 
         <Switch

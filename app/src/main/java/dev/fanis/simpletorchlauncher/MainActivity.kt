@@ -61,7 +61,15 @@ class MainActivity : Activity() {
             Prefs.setScreenOffEnabled(this, checked)
         }
 
-        options = listOf(findViewById<View>(R.id.volume_up), findViewById<View>(R.id.volume_down), screenOff)
+        val lockScreenOnly = findViewById<Switch>(R.id.lock_screen_only)
+        lockScreenOnly.isChecked = Prefs.lockScreenOnly(this)
+        lockScreenOnly.setOnCheckedChangeListener { _, checked ->
+            Prefs.setLockScreenOnly(this, checked)
+        }
+
+        options = listOf(
+            findViewById<View>(R.id.volume_up), findViewById<View>(R.id.volume_down), lockScreenOnly, screenOff
+        )
         val enabled = findViewById<Switch>(R.id.enabled)
         enabled.isChecked = Prefs.enabled(this)
         enabled.setOnCheckedChangeListener { _, checked ->

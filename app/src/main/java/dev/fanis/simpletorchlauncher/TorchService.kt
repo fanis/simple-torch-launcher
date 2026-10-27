@@ -2,6 +2,7 @@ package dev.fanis.simpletorchlauncher
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.app.KeyguardManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -22,6 +23,10 @@ import android.view.accessibility.AccessibilityEvent
  * follows, the torch toggles; otherwise the press is replayed as a normal volume change. This way a
  * double-press doesn't also change the volume.
  *
+ * While a camera is in use, or the phone is unlocked and the user only wants the shortcut on the lock
+ * screen, presses go to apps untouched instead, unless the torch is on: then the shortcut always
+ * works, so the torch can be turned off.
+ *
  * While the screen is off, [ScreenOffVolumeKeys] reports presses instead. There the volume doesn't
  * change on a press anyway, so nothing is held back.
  *
@@ -40,6 +45,10 @@ class TorchService : AccessibilityService(), SharedPreferences.OnSharedPreferenc
     // Screen on: the second press of a double-press is still held, so its key repeats must not
     // change the volume.
     private var ignoreRepeats = false
+
+    // Screen on: the current press goes to apps untouched. Decided once per press, so an app never
+    // gets half of one.
+    private var passThrough = false
 
     // Screen off: when the previous press arrived.
     private var lastScreenOffPress = 0L
@@ -89,9 +98,19 @@ class TorchService : AccessibilityService(), SharedPreferences.OnSharedPreferenc
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
         if (!Prefs.enabled(this) || event.keyCode != Prefs.triggerKeyCode(this)) return false
+        if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) passThrough = shouldPassThrough()
+        if (passThrough) return false
         if (event.action == KeyEvent.ACTION_DOWN) onTriggerKeyDown(event)
         // Swallow the whole press, key-up included. Volume changes are replayed by hand.
         return true
+    }
+
+    private fun shouldPassThrough(): Boolean {
+        val torch = torch ?: return false
+        if (torch.isOn) return false
+        // A camera app may use the button as a shutter, and the torch usually can't come on then.
+        if (torch.isCameraInUse) return true
+        return Prefs.lockScreenOnly(this) && !getSystemService(KeyguardManager::class.java).isKeyguardLocked
     }
 
     private fun onTriggerKeyDown(event: KeyEvent) {
