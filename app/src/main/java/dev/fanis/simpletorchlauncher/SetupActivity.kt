@@ -10,14 +10,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 /**
- * Walks the user through turning on the accessibility service: why it's needed, what the app
- * promises, what Android's warning means, and the steps. Once the service is on, the user can try a
- * double-press right here.
+ * Walks the user through turning on the accessibility service: what the app does, why it needs
+ * that, what it promises, and what Android's warning means. Once the service is on, the user can
+ * try a double-press right here.
  */
 class SetupActivity : Activity() {
 
     private lateinit var intro: View
+    private lateinit var introActions: View
     private lateinit var done: View
+    private lateinit var finish: View
     private lateinit var restrictedHelp: View
     private lateinit var tryResult: TextView
     private lateinit var torch: Torch
@@ -37,12 +39,13 @@ class SetupActivity : Activity() {
         openedAccessibilitySettings = savedInstanceState?.getBoolean(STATE_OPENED_SETTINGS) ?: false
 
         intro = findViewById(R.id.intro)
+        introActions = findViewById(R.id.intro_actions)
         done = findViewById(R.id.done)
+        finish = findViewById(R.id.finish)
         restrictedHelp = findViewById(R.id.restricted_help)
         tryResult = findViewById(R.id.try_result)
 
-        addPoints(findViewById(R.id.promises), R.array.setup_promises, numbered = false)
-        addPoints(findViewById(R.id.steps), R.array.setup_steps, numbered = true)
+        addPromises(findViewById(R.id.promises))
 
         findViewById<View>(R.id.open_accessibility_settings).setOnClickListener {
             openedAccessibilitySettings = true
@@ -56,7 +59,7 @@ class SetupActivity : Activity() {
         }
         findViewById<View>(R.id.open_app_info).setOnClickListener { openAppInfo() }
         findViewById<View>(R.id.not_now).setOnClickListener { finish() }
-        findViewById<View>(R.id.finish).setOnClickListener { finishSetup() }
+        finish.setOnClickListener { finishSetup() }
 
         torch = Torch(this) { on ->
             val changed = lastTorchOn != null && lastTorchOn != on
@@ -83,10 +86,12 @@ class SetupActivity : Activity() {
             findViewById<TextView>(R.id.try_it).setText(
                 if (Prefs.useVolumeDown(this)) R.string.setup_try_down else R.string.setup_try_up
             )
-            if (done.visibility != View.VISIBLE) findViewById<View>(R.id.root).scrollTo(0, 0)
+            if (done.visibility != View.VISIBLE) findViewById<View>(R.id.scroll).scrollTo(0, 0)
         }
         intro.visibility = if (serviceOn) View.GONE else View.VISIBLE
+        introActions.visibility = intro.visibility
         done.visibility = if (serviceOn) View.VISIBLE else View.GONE
+        finish.visibility = done.visibility
         // Android 13+ may block accessibility for apps it considers sideloaded. There is no public way to
         // tell whether that happened, so offer help once the user has tried and it's still off.
         restrictedHelp.visibility =
@@ -114,11 +119,9 @@ class SetupActivity : Activity() {
         finish()
     }
 
-    private fun addPoints(container: LinearLayout, items: Int, numbered: Boolean) {
-        resources.getStringArray(items).forEachIndexed { i, text ->
+    private fun addPromises(container: LinearLayout) {
+        for (text in resources.getStringArray(R.array.setup_promises)) {
             val row = layoutInflater.inflate(R.layout.item_point, container, false)
-            row.findViewById<TextView>(R.id.marker).text =
-                if (numbered) getString(R.string.step_number, i + 1) else getString(R.string.bullet)
             row.findViewById<TextView>(R.id.text).text = text
             container.addView(row)
         }

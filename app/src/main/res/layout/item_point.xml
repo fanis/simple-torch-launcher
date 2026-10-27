@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- One bullet point or numbered step in the setup screen. -->
+<!-- One promise in the setup screen, with a check mark. Not a compound drawable: that would centre
+     the check against two-line text instead of keeping it level with the first line. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:orientation="horizontal">
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal"
+    tools:ignore="UseCompoundDrawables">
 
-    <TextView
-        android:id="@+id/marker"
-        android:layout_width="28dp"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="1dp"
         android:importantForAccessibility="no"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/colorAccent"
-        android:textStyle="bold" />
+        android:src="@drawable/ic_check"
+        android:tint="?android:attr/colorAccent" />
 
     <TextView
         android:id="@+id/text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>
