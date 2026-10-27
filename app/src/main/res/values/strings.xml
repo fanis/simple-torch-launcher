@@ -6,7 +6,9 @@
 
     <string name="enabled">Double-press to toggle the torch</string>
     <string name="accessibility_on">Accessibility setting: on</string>
-    <string name="accessibility_off">Accessibility setting: off. The app needs it to see volume button presses.</string>
+    <string name="accessibility_on_summary">Manage it in Android’s settings. To just pause the shortcut, use the switch above.</string>
+    <string name="accessibility_off">Accessibility setting: off</string>
+    <string name="accessibility_off_summary">The app needs it to see volume button presses.</string>
     <string name="set_up">Set up</string>
     <string name="setup_title">Set up Simple Torch Launcher</string>
     <string name="setup_why">To see volume button presses, an app has to be turned on in the accessibility settings. Every app that reacts to hardware buttons needs this.\n\nAndroid then passes it every hardware key press, like the volume buttons or a connected keyboard. It never gets the power button, your touches, or typing on the on-screen keyboard.</string>

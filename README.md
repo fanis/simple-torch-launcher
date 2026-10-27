@@ -33,6 +33,10 @@ settings. Android has no public way for an app to check whether it is restricted
 - It keeps nothing but its own settings, and has no internet permission.
 - It's open source, so all of this can be checked.
 
+The switch at the top of the app pauses the shortcut: the app then stops receiving key presses
+altogether. To remove its access completely, tap the accessibility row in the app, or turn it off in
+Android's accessibility settings.
+
 ## How it works
 
 - **Screen on (including the lock screen):** the accessibility service sees every press of the chosen

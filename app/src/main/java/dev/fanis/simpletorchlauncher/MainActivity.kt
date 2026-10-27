@@ -15,6 +15,7 @@ class MainActivity : Activity() {
     private lateinit var torch: Torch
     private lateinit var torchButton: ToggleButton
     private lateinit var accessibilityStatus: TextView
+    private lateinit var accessibilitySummary: TextView
     private lateinit var setUp: View
     private lateinit var options: List<View>
 
@@ -33,8 +34,14 @@ class MainActivity : Activity() {
         }
 
         accessibilityStatus = findViewById(R.id.accessibility_status)
+        accessibilitySummary = findViewById(R.id.accessibility_summary)
         setUp = findViewById(R.id.set_up)
         setUp.setOnClickListener { startActivity(Intent(this, SetupActivity::class.java)) }
+        // Removing access is done in Android's settings, on purpose: getting it back takes the whole setup.
+        findViewById<View>(R.id.accessibility_row).setOnClickListener {
+            if (TorchService.isEnabled(this)) openAccessibilitySettings()
+            else startActivity(Intent(this, SetupActivity::class.java))
+        }
 
         torchButton = findViewById(R.id.torch)
         torch = Torch(this) { showTorchState() }
@@ -68,6 +75,9 @@ class MainActivity : Activity() {
         super.onResume()
         val serviceOn = TorchService.isEnabled(this)
         accessibilityStatus.setText(if (serviceOn) R.string.accessibility_on else R.string.accessibility_off)
+        accessibilitySummary.setText(
+            if (serviceOn) R.string.accessibility_on_summary else R.string.accessibility_off_summary
+        )
         setUp.visibility = if (serviceOn) View.GONE else View.VISIBLE
     }
 
