@@ -1,5 +1,7 @@
 # Simple Torch Launcher
 
+[![Build](https://github.com/fanis/simple-torch-launcher/actions/workflows/build.yml/badge.svg)](https://github.com/fanis/simple-torch-launcher/actions/workflows/build.yml)
+
 Double-press a volume button to switch the torch (flashlight) on. Double-press it again to switch it off.
 
 - Pick volume up or volume down as the trigger.
@@ -8,6 +10,12 @@ Double-press a volume button to switch the torch (flashlight) on. Double-press i
 - An on/off switch in the app, and a button to test the torch.
 - Free and open source (MIT). No ads, no tracking, no internet permission, no dependencies.
 - Android 6.0 (API 23) and newer, targeting Android 17 (API 37).
+
+## Download
+
+Coming to F-Droid. Until then, every build on
+[GitHub Actions](https://github.com/fanis/simple-torch-launcher/actions/workflows/build.yml) has the
+APKs attached.
 
 ## Setup
 
@@ -74,10 +82,17 @@ is turned on in the accessibility settings.
 ## Building
 
 ```sh
-./gradlew assembleRelease
+./gradlew assembleDebug     # installable debug build
+./gradlew assembleRelease   # unsigned release build
 ```
 
-Requires JDK 17 or newer and the Android SDK (platform 37). The release APK is unsigned.
+Requires JDK 17 or newer and the Android SDK (platform 37). There are no third-party dependencies.
+Every push and pull request is built and linted on GitHub Actions.
+
+## Contributing
+
+Issues and pull requests are welcome. Please keep the app small: no dependencies, no internet
+access, and nothing that needs more than the accessibility service already asks for.
 
 ## License
 
