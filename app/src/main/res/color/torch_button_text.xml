@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The background colour contrasts with the accent in both light and dark themes. -->
+    <item android:color="?android:attr/colorBackground" android:state_checked="true" />
+    <item android:color="?android:attr/textColorTertiary" android:state_enabled="false" />
+    <item android:color="?android:attr/textColorPrimary" />
+</selector>

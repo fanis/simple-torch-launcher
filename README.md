@@ -5,7 +5,7 @@ Double-press a volume button to switch the torch (flashlight) on. Double-press i
 - Pick volume up or volume down as the trigger.
 - Single presses still change the volume as usual, after a short delay (400 ms).
 - Works on the lock screen, and optionally while the screen is off (experimental).
-- An on/off switch in the app, and a switch to test the torch.
+- An on/off switch in the app, and a button to test the torch.
 - Free and open source (MIT). No ads, no tracking, no internet permission, no dependencies.
 - Android 6.0 (API 23) and newer, targeting Android 17 (API 37).
 
@@ -24,6 +24,8 @@ settings. Android has no public way for an app to check whether it is restricted
 
 ## Privacy
 
+- Android passes the app every hardware key press, like the volume buttons or a connected keyboard.
+  It never gets the power button, touches, or typing on the on-screen keyboard.
 - The app only reacts to the volume button you choose. Every other key goes straight back to
   Android, untouched.
 - It asks Android for key events only: no screen content, no accessibility events, no gestures.

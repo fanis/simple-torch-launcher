@@ -7,12 +7,13 @@ import android.view.View
 import android.widget.RadioGroup
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.ToggleButton
 
-/** The settings screen: on/off, accessibility status, a torch test switch, and the options. */
+/** The settings screen: on/off, accessibility status, a torch test button, and the options. */
 class MainActivity : Activity() {
 
     private lateinit var torch: Torch
-    private lateinit var torchSwitch: Switch
+    private lateinit var torchButton: ToggleButton
     private lateinit var accessibilityStatus: TextView
     private lateinit var setUp: View
     private lateinit var options: List<View>
@@ -35,10 +36,10 @@ class MainActivity : Activity() {
         setUp = findViewById(R.id.set_up)
         setUp.setOnClickListener { startActivity(Intent(this, SetupActivity::class.java)) }
 
-        torchSwitch = findViewById(R.id.torch)
+        torchButton = findViewById(R.id.torch)
         torch = Torch(this) { showTorchState() }
-        // The switch flips itself on click; put it back if the torch didn't take the request.
-        torchSwitch.setOnClickListener { if (!torch.toggle()) showTorchState() }
+        // The button flips itself on click; put it back if the torch didn't take the request.
+        torchButton.setOnClickListener { if (!torch.toggle()) showTorchState() }
         showTorchState()
 
         val button = findViewById<RadioGroup>(R.id.button)
@@ -76,9 +77,10 @@ class MainActivity : Activity() {
     }
 
     private fun showTorchState() {
-        torchSwitch.isEnabled = torch.isAvailable
-        torchSwitch.isChecked = torch.isOn
-        torchSwitch.setText(if (torch.isAvailable) R.string.torch_test else R.string.torch_missing)
+        torchButton.isEnabled = torch.isAvailable
+        if (!torch.isAvailable) torchButton.textOff = getString(R.string.torch_missing)
+        // Also refreshes the label.
+        torchButton.isChecked = torch.isOn
     }
 
     private fun showOptionsEnabled(enabled: Boolean) {
