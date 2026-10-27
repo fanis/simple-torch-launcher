@@ -37,6 +37,18 @@
     <string name="setup_finish">Done</string>
     <string name="step_number">%1$d.</string>
     <string name="bullet" translatable="false">•</string>
+    <string name="guide_steps">Find Simple Torch Launcher, turn it on, then tap Allow.</string>
+    <string name="guide_step_find">Tap Simple Torch Launcher</string>
+    <string name="guide_step_switch">Turn it on</string>
+    <string name="guide_step_allow">Tap Allow</string>
+    <string name="guide_mock_title">Accessibility</string>
+    <string name="guide_mock_section">Downloaded apps</string>
+    <string name="guide_mock_off">Off</string>
+    <string name="guide_mock_use">Use Simple Torch Launcher</string>
+    <string name="guide_mock_dialog">Allow Simple Torch Launcher to have full control of your device?</string>
+    <string name="guide_mock_deny">Deny</string>
+    <string name="guide_mock_allow">Allow</string>
+    <string name="guide_close">Close</string>
     <string name="restricted_title">Seeing “Restricted setting”?</string>
     <string name="restricted_help">Android blocks this for some apps installed outside an app store. Open App info, tap ⋮ in the top corner and choose “Allow restricted settings”. Then turn Simple Torch Launcher on in the accessibility settings again.</string>
     <string name="open_app_info">Open App info</string>
@@ -60,5 +72,6 @@
     <string name="about_license">Free and open-source software, released under the MIT License.</string>
     <string name="about_source">Source code:\nhttps://github.com/fanis/simple-torch-launcher</string>
 
+    <string name="service_summary">Double-press a volume button to toggle the torch</string>
     <string name="service_description">Lets you double-press a volume button to turn the torch on and off.\n\nAndroid passes the app every hardware key press, like the volume buttons or a connected keyboard, but never the power button, touches or on-screen typing. The app only reacts to your chosen volume button and hands every other key straight back. It doesn’t read your screen, keeps nothing but its own settings, and has no internet access.</string>
 </resources>

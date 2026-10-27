@@ -5,5 +5,6 @@
     android:canRequestFilterKeyEvents="true"
     android:canRetrieveWindowContent="false"
     android:description="@string/service_description"
+    android:summary="@string/service_summary"
     android:notificationTimeout="0"
     android:settingsActivity="dev.fanis.simpletorchlauncher.MainActivity" />

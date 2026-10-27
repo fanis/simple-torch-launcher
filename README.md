@@ -13,7 +13,8 @@ Double-press a volume button to switch the torch (flashlight) on. Double-press i
 
 1. Install and open the app. A setup screen explains why it needs an accessibility service, what it
    promises not to do, and what Android's "full control" warning means.
-2. Turn on **Simple Torch Launcher** in the accessibility settings. The app brings you back to its
+2. Turn on **Simple Torch Launcher** in the accessibility settings. On Android 8 and newer, a small
+   floating guide shows the steps over the settings. Once it's on, the app brings you back to its
    setup screen, where you can try a double-press straight away.
 3. Pick the button you want to use.
 
