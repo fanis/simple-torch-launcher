@@ -9,7 +9,8 @@ Double-press a volume button to switch the torch (flashlight) on. Double-press i
 - Pick volume up or volume down as the trigger.
 - Single presses still change the volume as usual, after a short delay (400 ms).
 - Works on the lock screen, and optionally while the screen is off (experimental).
-- Optionally only on the lock screen, so apps get the button as usual once the phone is unlocked.
+- Optionally only on the lock screen, so apps that use the volume buttons, like e-book readers or
+  games, get them as usual once the phone is unlocked.
 - Steps aside while the camera is in use, so the button still works as a camera shutter.
 - An on/off switch in the app, and a button to test the torch.
 - Free and open source (MIT). No ads, no tracking, no internet permission, no dependencies.

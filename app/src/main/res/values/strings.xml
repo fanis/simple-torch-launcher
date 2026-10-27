@@ -56,7 +56,7 @@
 
     <string name="section_lock_screen">Lock screen</string>
     <string name="lock_screen_only">Only work on the lock screen</string>
-    <string name="lock_screen_only_note">Once unlocked, apps get the button as usual. While the torch is on, a double-press still turns it off.</string>
+    <string name="lock_screen_only_note">Useful if an app you use needs the volume buttons, like an e-book reader or a game. Once unlocked, apps get the button as usual. While the torch is on, a double-press still turns it off.</string>
 
     <string name="section_screen_off">Screen off</string>
     <string name="screen_off">Also work when the screen is off</string>
