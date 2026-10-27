@@ -99,35 +99,39 @@ is turned on in the accessibility settings.
 Requires JDK 17 or newer and the Android SDK (platform 37). There are no third-party dependencies.
 Code and build changes on `main` and in pull requests are built and linted on GitHub Actions.
 
-## Releasing
+To sign release builds with your own key, copy `keystore.properties.example` to
+`keystore.properties` and fill it in. Git ignores it. Without it, the release APK is unsigned.
 
-Releases are cut with the **Cut Release** workflow (Actions tab → Cut Release → Run workflow). Add
-the release notes under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) first, then pick a bump
-type or enter a version. The workflow bumps the version, moves the notes under it, writes F-Droid's
-release notes, builds, commits, tags `X.Y.Z` and publishes a GitHub Release with the APK.
+## Releases
 
-The APK is signed with your own key, kept in four repository secrets (Settings → Secrets and
-variables → Actions): `ANDROID_RELEASE_KEYSTORE_BASE64`, `ANDROID_RELEASE_STORE_PASSWORD`,
-`ANDROID_RELEASE_KEY_ALIAS` and `ANDROID_RELEASE_KEY_PASSWORD`. To create the key once, with the
-JDK's `keytool`:
+Each version is published on [GitHub Releases](https://github.com/fanis/simple-torch-launcher/releases)
+with a signed APK and its notes from the [changelog](CHANGELOG.md). GitHub Actions builds the APK from
+the version's tag in this repository.
 
-```sh
-keytool -genkeypair -v -keystore simple-torch-launcher-release.jks -alias simple-torch-launcher -keyalg RSA -keysize 4096 -validity 10000
+The APKs on GitHub are signed with the developer's key. The SHA-256 fingerprint of its certificate is:
+
+```text
+85:23:B3:63:A1:3A:69:C8:20:C0:94:E2:25:79:90:C3:52:A3:89:11:7A:61:4B:A3:E4:78:61:A3:44:83:42:3E
 ```
 
-`ANDROID_RELEASE_KEYSTORE_BASE64` is the file, base64-encoded
-(`base64 -w0 simple-torch-launcher-release.jks`, or in PowerShell
-`[Convert]::ToBase64String([IO.File]::ReadAllBytes("simple-torch-launcher-release.jks"))`), and
-`ANDROID_RELEASE_KEY_ALIAS` is `simple-torch-launcher`. Keep a backup of the keystore and its
-passwords outside the repo: updates must be signed with the same key. F-Droid builds and signs
-its own APKs, so copies from F-Droid and from GitHub can't update each other.
+You can check a download against it with `apksigner verify --print-certs`, or an app like
+[AppVerifier](https://github.com/soupslurpr/AppVerifier).
 
-To build a signed release APK locally with the same key, put the keystore in `release/` and copy `keystore.properties.example` to `keystore.properties` at the repo root, with the real passwords. Git ignores both. `./gradlew assembleRelease` then writes a signed `app/build/outputs/apk/release/app-release.apk`. Without `keystore.properties` the release APK stays unsigned, as on GitHub Actions and F-Droid.
+F-Droid builds and signs its own APKs, so a copy from F-Droid and a copy from GitHub can't update
+each other. To switch between them, uninstall the app first.
+
+To get updates from GitHub automatically, add this repository's URL to
+[Obtainium](https://github.com/ImranR98/Obtainium).
 
 ## Contributing
 
 Issues and pull requests are welcome. Please keep the app small: no dependencies, no internet
 access, and nothing that needs more than the accessibility service already asks for.
+
+## Provenance
+
+This Android app was authored by Fanis Hatzidakis (https://fanis.dev) with assistance from
+large-language-model tooling (Claude Code). All code was reviewed, tested, and adapted by Fanis.
 
 ## License
 
