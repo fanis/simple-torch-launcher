@@ -13,9 +13,9 @@ Double-press a volume button to switch the torch (flashlight) on. Double-press i
 
 ## Download
 
-Coming to F-Droid. Until then, every build on
-[GitHub Actions](https://github.com/fanis/simple-torch-launcher/actions/workflows/build.yml) has the
-APKs attached.
+Coming to F-Droid. Until then, get the APK from
+[Releases](https://github.com/fanis/simple-torch-launcher/releases). See the
+[changelog](CHANGELOG.md) for what's new.
 
 ## Setup
 
@@ -88,6 +88,26 @@ is turned on in the accessibility settings.
 
 Requires JDK 17 or newer and the Android SDK (platform 37). There are no third-party dependencies.
 Every push and pull request is built and linted on GitHub Actions.
+
+## Releasing
+
+Releases are cut with the **Cut Release** workflow (Actions tab → Cut Release → Run workflow). Add
+the release notes under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) first, then pick a bump
+type or enter a version. The workflow bumps the version, moves the notes under it, writes F-Droid's
+release notes, builds, commits, tags `X.Y.Z` and publishes a GitHub Release with the APK.
+
+The APK is signed with your own key, kept in four repository secrets (Settings → Secrets and
+variables → Actions): `SIGNING_KEYSTORE`, `SIGNING_KEYSTORE_PASSWORD`, `SIGNING_KEY_ALIAS` and
+`SIGNING_KEY_PASSWORD`. To create the key once, with the JDK's `keytool`:
+
+```sh
+keytool -genkeypair -v -keystore release.jks -alias simple-torch-launcher -keyalg RSA -keysize 4096 -validity 10000
+```
+
+`SIGNING_KEYSTORE` is the file, base64-encoded (`base64 -w0 release.jks`, or in PowerShell
+`[Convert]::ToBase64String([IO.File]::ReadAllBytes("release.jks"))`). Keep a backup of
+`release.jks` and its passwords: updates must be signed with the same key. F-Droid builds and signs
+its own APKs, so copies from F-Droid and from GitHub can't update each other.
 
 ## Contributing
 

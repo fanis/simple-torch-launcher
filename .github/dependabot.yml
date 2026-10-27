@@ -1,11 +1,20 @@
 version: 2
 updates:
+  # Each ecosystem's updates arrive together, as at most one pull request a month.
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
+    groups:
+      github-actions:
+        patterns:
+          - "*"
 
   - package-ecosystem: gradle
     directory: /
     schedule:
       interval: monthly
+    groups:
+      gradle:
+        patterns:
+          - "*"
