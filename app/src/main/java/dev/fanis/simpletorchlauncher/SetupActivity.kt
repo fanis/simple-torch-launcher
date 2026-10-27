@@ -1,12 +1,10 @@
 package dev.fanis.simpletorchlauncher
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
+import android.os.SystemClock
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -49,11 +47,14 @@ class SetupActivity : Activity() {
         findViewById<View>(R.id.open_accessibility_settings).setOnClickListener {
             openedAccessibilitySettings = true
             awaitingService = true
-            open(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            if (GuideActivity.isSupported(this)) {
+                // The guide floats over the settings and opens them itself.
+                startActivity(Intent(this, GuideActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            } else {
+                openAccessibilitySettings()
+            }
         }
-        findViewById<View>(R.id.open_app_info).setOnClickListener {
-            open(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null)))
-        }
+        findViewById<View>(R.id.open_app_info).setOnClickListener { openAppInfo() }
         findViewById<View>(R.id.not_now).setOnClickListener { finish() }
         findViewById<View>(R.id.finish).setOnClickListener { finishSetup() }
 
@@ -70,6 +71,11 @@ class SetupActivity : Activity() {
     override fun onResume() {
         super.onResume()
         val serviceOn = TorchService.isEnabled(this)
+        // The guide only helps over Android's settings, so close it once the user is back here. This
+        // screen also shows for a moment while the guide shrinks and the settings open; skip that.
+        if (serviceOn || SystemClock.uptimeMillis() - GuideActivity.shownAt > GUIDE_SETTLE_MS) {
+            GuideActivity.close()
+        }
         if (serviceOn) {
             awaitingService = false
             // Going through setup means the user wants the shortcut, even if they switched it off before.
@@ -94,7 +100,10 @@ class SetupActivity : Activity() {
     }
 
     override fun onDestroy() {
-        if (isFinishing) awaitingService = false
+        if (isFinishing) {
+            awaitingService = false
+            GuideActivity.close()
+        }
         torch.release()
         super.onDestroy()
     }
@@ -115,15 +124,9 @@ class SetupActivity : Activity() {
         }
     }
 
-    private fun open(intent: Intent) {
-        try {
-            startActivity(intent)
-        } catch (_: ActivityNotFoundException) {
-        }
-    }
-
     companion object {
         private const val STATE_OPENED_SETTINGS = "opened_accessibility_settings"
+        private const val GUIDE_SETTLE_MS = 2000L
 
         /**
          * Set while the user is in the accessibility settings from this screen, so [TorchService] can

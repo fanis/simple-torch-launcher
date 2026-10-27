@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -19,6 +20,17 @@
         <activity
             android:name=".SetupActivity"
             android:exported="false" />
+
+        <!-- Floats over the accessibility settings in its own task, separate from the app's screens. -->
+        <activity
+            android:name=".GuideActivity"
+            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:supportsPictureInPicture="true"
+            android:taskAffinity="${applicationId}.guide"
+            tools:targetApi="24" />
 
         <activity
             android:name=".AboutActivity"

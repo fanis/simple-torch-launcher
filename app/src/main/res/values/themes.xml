@@ -27,6 +27,13 @@
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
     </style>
 
+    <style name="GuideTap">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:alpha">0</item>
+        <item name="android:background">@drawable/guide_tap</item>
+    </style>
+
     <style name="AboutText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
