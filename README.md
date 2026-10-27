@@ -87,7 +87,7 @@ is turned on in the accessibility settings.
 ```
 
 Requires JDK 17 or newer and the Android SDK (platform 37). There are no third-party dependencies.
-Every push and pull request is built and linted on GitHub Actions.
+Code and build changes on `main` and in pull requests are built and linted on GitHub Actions.
 
 ## Releasing
 

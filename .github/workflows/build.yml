@@ -1,8 +1,13 @@
 name: Build
 
+# Builds only when code, resources or build files change: on main, and in pull requests.
+# Tags are left to release.yml.
 on:
   push:
+    branches: [main]
+    paths: ['app/**', 'gradle/**', '*.gradle.kts', 'gradle.properties', 'gradlew*', '.github/workflows/build.yml']
   pull_request:
+    paths: ['app/**', 'gradle/**', '*.gradle.kts', 'gradle.properties', 'gradlew*', '.github/workflows/build.yml']
   workflow_dispatch:
 
 permissions:
