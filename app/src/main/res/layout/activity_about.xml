@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -7,14 +8,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="24dp">
 
         <ImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_launcher" />
 
@@ -22,33 +21,100 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:accessibilityHeading="true"
+            android:fontFamily="sans-serif-medium"
             android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="30sp"
+            tools:targetApi="28" />
 
         <TextView
-            android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_marginTop="8dp"
+            android:text="@string/about_tagline"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            style="@style/AboutText"
-            android:layout_marginTop="24dp"
-            android:text="@string/about_free" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/guide_card"
+            android:padding="16dp"
+            android:text="@string/about_free"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            style="@style/AboutText"
-            android:text="@string/about_author" />
+        <LinearLayout
+            style="@style/AboutRow"
+            android:layout_marginTop="16dp">
 
-        <TextView
-            style="@style/AboutText"
-            android:text="@string/about_license" />
+            <LinearLayout style="@style/AboutRowTexts">
 
-        <TextView
-            style="@style/AboutText"
-            android:autoLink="web"
-            android:text="@string/about_source" />
+                <TextView
+                    style="@style/AboutRowTitle"
+                    android:text="@string/about_made_by" />
+
+                <TextView
+                    style="@style/AboutRowValue"
+                    android:text="@string/about_author" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/source"
+            style="@style/AboutRow"
+            android:background="?android:attr/selectableItemBackground">
+
+            <LinearLayout style="@style/AboutRowTexts">
+
+                <TextView
+                    style="@style/AboutRowTitle"
+                    android:text="@string/about_source_title" />
+
+                <TextView
+                    style="@style/AboutRowValue"
+                    android:text="@string/about_source" />
+            </LinearLayout>
+
+            <ImageView
+                style="@style/AboutRowChevron"
+                android:importantForAccessibility="no" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/license"
+            style="@style/AboutRow"
+            android:background="?android:attr/selectableItemBackground">
+
+            <LinearLayout style="@style/AboutRowTexts">
+
+                <TextView
+                    style="@style/AboutRowTitle"
+                    android:text="@string/about_license_title" />
+
+                <TextView
+                    style="@style/AboutRowValue"
+                    android:text="@string/about_license" />
+            </LinearLayout>
+
+            <ImageView
+                style="@style/AboutRowChevron"
+                android:importantForAccessibility="no" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/AboutRow">
+
+            <LinearLayout style="@style/AboutRowTexts">
+
+                <TextView
+                    style="@style/AboutRowTitle"
+                    android:text="@string/about_version_title" />
+
+                <TextView
+                    android:id="@+id/version"
+                    style="@style/AboutRowValue" />
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
