@@ -60,35 +60,11 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
-            android:id="@+id/open_accessibility_settings"
+            android:id="@+id/set_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/open_accessibility_settings" />
-
-        <LinearLayout
-            android:id="@+id/restricted_help"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/Note"
-                android:text="@string/restricted_title"
-                android:textStyle="bold" />
-
-            <TextView
-                style="@style/Note"
-                android:text="@string/restricted_help" />
-
-            <Button
-                android:id="@+id/open_app_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/open_app_info" />
-        </LinearLayout>
+            android:text="@string/set_up" />
 
         <Switch
             android:id="@+id/torch"
